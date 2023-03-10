@@ -158,7 +158,6 @@ db.categoriestree.find().forEach(function(doc) {
                          parent = null;
                       }
                    }
- 
                    return ancestors.reverse();
                 })()
              }
@@ -175,7 +174,10 @@ db.categoriestree.find().forEach(function(doc) {
  // - Décomposer la base de donnée en plusieurs collection :
  //             - Collection cuisine (pour le type de cuisine)
  //             - collection Borough (pour les quartier)
- //             - modifier les grades en assignant une note (number)
+ //             - collection addresse 
+//              - collection grades ou on stock le tableau de grades. On ajoute un grade_id aux documents
+//                de la collection 'restaurants'. Si on recherche les grades d'un restaurant, on fais:
+ // - modifier les grades en assignant une note (number)
 
 
  // On crée la collection 'borough'
@@ -210,7 +212,7 @@ db.restaurants.updateMany(
     { $unset: { borough: ""}},
  )
 
-  // On crée la collection 'borough'
+  // On crée la collection 'cuisineType'
   db.createCollection('cuisineType')
   // On insere les nouvelles datas
    db.cuisineType.insertMany([
@@ -241,3 +243,52 @@ db.restaurants.updateMany(
       {},
       { $unset: { borough: ""}},
    )
+
+
+// On regroupe les restaurants avec la clé $restaurant_id et un champ grades ou on pousse les valeur dans un tableau. Le out pour enregistrer le reultat dans une nouvelle collection
+db.restaurants.aggregate([
+ {
+    $group: {
+       _id: {$concat:["Restaurant ", "$restaurant_id"]},
+       grades: { $push: "$grades" }
+    }
+ },
+ {
+    $out: "grades"
+ }]
+ )
+
+ // test pour verifier que ca a fonctionné
+ db.grades.find({
+  _id: 'Restaurant 40803254'
+ })
+
+ // Suppression du champs grades des document de la collection "restaurants"
+ db.restaurants.updateMany(
+  {},
+  { $unset: { grades: ""}},
+)
+
+// On regroupe les restaurants avec la clé $restaurant_id et un champ address ou on pousse les valeur dans un tableau. Le out pour enregistrer le reultat dans une nouvelle collection
+db.restaurants.aggregate([
+  {
+     $group: {
+        _id: {$concat:["Restaurant ", "$restaurant_id"]},
+        address: { $push: "$address" }
+     }
+  },
+  {
+     $out: "addressRestaurant"
+  }
+])
+
+// test pour verifier que ca a fonctionné
+db.addressRestaurant.find({
+  _id: 'Restaurant 40803254'
+ })
+
+ // Suppression du champs addresse des document de la collection "restaurants"
+ db.restaurants.updateMany(
+  {},
+  { $unset: { address: ""}},
+)
