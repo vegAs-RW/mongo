@@ -1,0 +1,543 @@
+db.restaurants.findOne()
+db.restaurants.updateMany( {}, { $unset: { borough: "" } })
+db.restaurants.updateMany( { $unset: { borough: "" } })
+db.restaurants.updateMany( { $unset: { borough: "" } }, { "upsert": false })
+db.restaurants.updateMany( { $unset: { borough: "" } }, { "upsert": false })
+db.restaurants.find({ borough_id: { $exists: true } }). count()
+db.restaurants.find({ borough_id: { $exists: true } })
+db.restaurants.findOne()
+for (borough of boroughs) { db.restaurants.updateMany( { borough: borough._id }, { $set: { borough_id: borough._id } }); }
+const boroughs = db.borough.find().toArray();
+db.borough.insertMany([ { _id: "Manhattan", name: "Manhattan" }, { _id: "Brooklyn", name: "Brooklyn" }, { _id: "Bronx", name: "Bronx" }, { _id: "Queens", name: "Queens" }, { _id: "Staten Island", name: "Staten Island" }, { _id: "Missing", name: "Missing" }]);
+db.createCollection('borough')
+show collections
+show collection
+use ny
+db.categoriestree.find()
+db.categoriestree.findOne()
+db.categoriestree.find().forEach(function (doc) { db.categoriestree.updateOne( { _id: doc._id }, { $addToSet: { ancestors: { $each: (() => { const ancestors = []; let parent = doc.parent; while (parent !== null) { const parentDoc = db.categoriestree.findOne({ _id: parent }); if (parentDoc) { ancestors.push({ _id: parentDoc._id }); parent = parentDoc.parent; } else { parent = null; } } return ancestors.reverse(); })() } } }); });
+db.categoriestree.getIndexes()
+db.categoriestree.createIndex( { parent: 1 } );
+db.categoriestree.findOne()
+db.categoriestree.insertMany( [ { _id: "Books", parent: null, name: "Informatique" }, { _id: "Programming", parent: "Books", books: [ "Python apprendre", "Pandas & Python", "async/await JS & Python", "JS paradigme objet", "Anaconda"] }, { _id: "Database", parent: "Programming", books: [ "NoSQL & devenir expert avec la console", "NoSQL drivers", "SQL"] }, { _id: "MongoDB", parent: "Database", books: [ "Introduction à MongoDB", "MongoDB aggrégation"] }])
+db.categoriestree.find()
+db.categoriestree.deleteMany({})
+db.categoriestree.insertMany( [ { _id: "Books", parent: null, name: "Informatique" }, { _id: "Programming", parent: "Books", books: [ "Python apprendre", "Pandas & Python", "async/await JS & Python", "JS paradigme objet", "Anaconda"] }, { _id: "Database", parent: "Programming", books: [ "NoSQL & devenir expert avec la console", "NoSQL drivers", "SQL"] }, { _id: "MongoDB", parent: "Database", books: [ "Introduction à MongoDB", "MongoDB aggrégation"] }])
+db.categoriestree.find()
+db.collection.drop('categoriestree')
+db.categoriestree.find()
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category._id }, { _id: 1 }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.updateMany({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }, { $project: { _id: 0, ancestors: 1 } }); });
+// Parcourir toutes les catégories
+const categoriestree = db.categoriestree.find();
+db.categoriestree.find();
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category._id }, { _id: 1 }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.updateMany({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }); });
+// Parcourir toutes les catégories
+const categoriestree = db.categoriestree.find();
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category._id }, { _id: 1 }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.updateMany({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }); });
+db.categoriestree.find();
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category.parent }, { parent: 1 }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.updateMany({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }); });
+// Parcourir toutes les catégories
+const categoriestree = db.categoriestree.find();
+db.categoriestree.find( { _id: "MongoDB" }, { ancestors: 1 });
+const categoriestree = db.categoriestree.find();
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category.parent }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.updateMany({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }); });
+// Parcourir toutes les catégories
+const categoriestree = db.categoriestree.find();
+db.categoriestree.find( { _id: "MongoDB" }, { ancestors: 1 });
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category.parent_id }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent_id }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.updateMany({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }); });
+// Parcourir toutes les catégories
+const categoriestree = db.categoriestree.find();
+categoriestree.forEach(function (category) { /* Initialiser la liste des ancêtres*/ let ancestors = []; /* Trouver le parent de la catégorie courante*/ let parent = db.categoriestree.findOne({ _id: category.parent_id }); /* Tant qu'il y a un parent, l'ajouter à la liste des ancêtres*/ while (parent) { ancestors.push(parent); parent = db.categoriestree.findOne({ _id: parent.parent_id }); } /* Ajouter la liste des ancêtres à la catégorie courante*/ db.categoriestree.update({ _id: category._id }, { $addToSet: { ancestors: { $each: ancestors.reverse() } } }); });
+// Parcourir toutes les catégories
+const categoriestree = db.categoriestree.find();
+db.categoriestree.find()
+db.categoriestree.createIndex( { parent: 1 } );
+db.categoriestree.find()
+db.categoriestree.insertMany( [ { _id: "Books", parent: null, name: "Informatique" }, { _id: "Programming", parent: "Books", books: [ "Python apprendre", "Pandas & Python", "async/await JS & Python", "JS paradigme objet", "Anaconda"] }, { _id: "Database", parent: "Programming", books: [ "NoSQL & devenir expert avec la console", "NoSQL drivers", "SQL"] }, { _id: "MongoDB", parent: "Database", books: [ "Introduction à MongoDB", "MongoDB aggrégation"] }])
+db.categoriestree.find()
+db.categoriestree.insertMany([ [ { _id: "Books", parent: null, name: "Informatique" }, { _id: "Programming", parent: "Books", books: [ "Python apprendre", "Pandas & Python", "async/await JS & Python", "JS paradigme objet", "Anaconda"] }, { _id: "Database", parent: "Programming", books: [ "NoSQL & devenir expert avec la console", "NoSQL drivers", "SQL"] }, { _id: "MongoDB", parent: "Database", books: [ "Introduction à MongoDB", "MongoDB aggrégation"] }]])
+db.createCollection('categoriestree')
+db.books.find({ category_id: { $exists: false } })
+db.books.find({ category_id: { $exist: false } })
+db.books.find()
+db.books.updateOne( { title: "Modélisation des données" }, { $unset: { category_id: "" } });
+db.books.updateOne( { title: "Pandas & SQL & NoSQL" }, { $set: { category_id: [categories[0]._id, categories[1]._id, categories[2]._id] } });
+db.books.updateOne( { title: "JS SQL ou NoSQL" }, { $set: { category_id: [categories[0]._id] } });
+db.books.updateOne( { title: "Python & SQL" }, { $set: { category_id: [categories[0]._id, categories[1]._id] } });
+db.books.insertMany(newBooks)
+const newBooks = [ { title: "Python & SQL" }, /* programmation & SQL*/ { title: "JS SQL ou NoSQL" }, /* programmation*/ { title: "Pandas & SQL & NoSQL" }, /* SQL, NoSQL et programmation*/ { title: "Modélisation des données" } /* aucune catégorie*/]
+db.books.insertMany(newBooks)
+db.books.find( { category_id: db.categories.findOne( { name: "NoSQL" })._id }).count()
+  db.books.find({ category_id: db.categories.findOne({ name: "Programmation" })._id })
+db.books.find()
+db.books.updateOne( { title: "MongoDB" }, { $set: { category_id: categories[2]._id } });
+db.books.updateOne( { title: "MySQL" }, { $set: { category_id: categories[1]._id } });
+db.books.updateOne( { title: "PosgreSQL" }, { $set: { category_id: categories[1]._id } });
+db.books.updateOne( { title: "JS" }, { $set: { category_id: categories[0]._id } });
+db.books.updateOne( { title: "Python" }, { $set: { category_id: categories[0]._id } });
+console.log(categoriesDict);
+categories.forEach((category) => { categoriesDict[category.name] = category._id; });
+const categoriesDict = {};
+console.log(categories);
+const categories = db.categories.find({},{_id:1}).toArray();
+db.books.insertMany(books)
+const books = [ { title: "Python" }, /* programmation*/ { title: "JS" }, /* programmation*/ { title: "PosgreSQL" }, /* SQL*/ { title: "MySQL" }, /* SQL*/ { title: "MongoDB" } /* NoSQL*/];
+db.createCollection('books')
+db.categories.insertMany(categories)
+const categories = [ { name: "Programmation" }, { name: "SQL" }, { name: "NoSQL" }];
+db.createCollection('categories')
+show collections
+use bookstore
+db.dropDatabase('bookstore')
+db.dropDataBase('bookstore')
+db.books.find()
+db.books.find().forEach((book) => { /* Trouver la catégorie correspondante dans le tableau categories*/ const category = categories.find((c) => c.name === book.title); /* Si une catégorie est trouvée, associer l'id de la catégorie au livre*/ if (category) { db.books.updateOne( { _id: book._id }, { $set: { category_id: category._id } }); } })
+// Parcourir tous les documents de la collection books
+const categories = db.categories.find().toArray()
+  };
+    return db.collection(collectionName);
+    console.log(`Retrieving collection ${collectionName} …`);
+  export function getCollection(collectionName) {
+  };
+    });
+        return db;
+        db = client.db(dbName);
+        console.log('Connection to mongoDB initialized ...');
+    return client.connect.then(() => {
+  export function openDataBase(dbName) {
+  let db = null;
+  const client = new MongoClient(CONNECTION_STRING);
+  const CONNECTION_STRING = "mongodb://root:example@mongo:27017";
+import {MongoClient} from 'mongodb'
+db.books.findOne()
+db.categories.find()
+db.books.find()
+db.books.aggregate([ { $lookup: { from: "categories", localField: "title", foreignField: "name", as: "category" } }, { $addFields: { category_id: { $arrayElemAt: ["$category._id", 0] } } }, { $project: { category: 0 } }])
+db.books.updateMany({}, [ { $lookup: { from: "categories", localField: "title", foreignField: "name", as: "category" } }, { $addFields: { category_id: { $arrayElemAt: ["$category._id", 0] } } }, { $project: { category: 0 } }])
+db.books.insertMany([ { title: "Python" }, { title: "JS" }, { title: "PosgreSQL" }, { title: "MySQL" }, { title: "MongoDB" }])
+db.createCollection('books')
+db.categories.insertMany([ { name: "Programmation" }, { name: "SQL" }, { name: "NoSQL" }])
+db.createCollection('categories')
+use bookstore
+cls
+db.restaurants.aggregate([ { $addFields: { gradeA: { $function: { body: function (grades) { return grades.filter((g) => g.grade === "A").length; }, args: ["$grades"], lang: "js" } } } }, { $project: { gradeA: 1, name: 1, _id: 0, name: 1 } }, { $group: { _id: "$gradeA", name: { $push: "$name" } } }, { $sort: { gradeA: -1 } }, { $limit: 1 }])
+db.restaurants.aggregate([ { $addFields: { gradeA: { $function: { body: function (grades) { return grades.filter((g) => g.grade === "A").length; }, args: ["$grades"], lang: "js" } } } }, { $project: { gradeA: 1, name: 1, _id: 0, restaurant_id: 1 } }, { $group: { _id: "$gradeA", restaurant_id: { $push: "$restaurant_id" } } }, { $sort: { gradeA: -1 } }, { $limit: 1 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $project: { _id: 0, name: 1, avg: { $avg: "$grades.score" }, borough: 1 } }, { $sort: { avg: -1 } }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $project: { _id: 0, name: 1, avg: { $avg: "$grades.score" }, borough: 1 } }, { $sort: { avg: -1 } }, { $limit: 1 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { avg: { $avg: "$grades.score" }, _id: "$borough", names: { $push: "$name" } } }, { $project: { names: 1, avg: 1 } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { avg: { $avg: "$grades.score" }, _id: "$borough", names: { $push: "$name" } } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { avg: { $avg: "$grades.score" }, _id: { borough: "$borough" }, names: { name: { $push: "$name" } } } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { avg: { $avg: "$grades.score" }, _id: "$borough" } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { avg: { $avg: "$grades.score" }, _id: "$name" } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { avg: { $avg: "$grades.score" }, _id: "$borough" } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { name: "$name", avg: { $avg: "$grades.score" }, _id: "$borough" } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { name: 1, avg: { $avg: "$grades.score" }, _id: "$borough" } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { name: 1, avg: { $avg: "$grades.score" }, _id: "$borough" } }, { $project: { name: 1, avg: { $avg: "$grades.score" }, _id: 0 } }, { $sort: { avg: -1 } }, { $limit: 5 }])
+db.top5Best.find()
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $project: { name: 1, avg: { $avg: "$grades.score" }, _id: 0 } }, { $sort: { avg: -1 } }, { $limit: 5 }, { $out: "top5Best" }])
+db.restaurants.aggregate([ { $match: { "grades.score": { $gte: 30 } } }, { $group: { _id: { cuisine: "$cuisine", borough: "$borough" }, sumResto: { $sum: 1 } } }, { $sort: { sumResto: -1 } }])
+db.top5.find()
+show collections
+shox collections
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $unwind: "$grades" }, { $project: { name: 1, avg: { $avg: "$grades.score" }, _id: 0 } }, { $sort: { avg: -1 } }, { $limit: 5 }, { $out: "top5" }])
+db.restaurants.aggregate([ { $group: { _id: { cuisine: "$cuisine", borough: "$borough" }, names: { $push: { name: "$name", restaurant: "$restaurant_id" } } } }, { $limit: 2 }])
+db.restaurants.aggregate([ { $group: { _id: { cuisine: "$cuisine", borough: "$borough" }, names: { $push: { name: "$name", restaurant: "$restaurant_id" } } } }, { limit: 2 }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $group: { _id: "$name", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, moyenne: { $avg: "$grades.score" } } }, { $sort: { moyenne: -1 } }])
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $match: { cuisine: 'Italian' } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, moyenne: { $avg: "$grades.score" } } }, { $sort: { moyenne: -1 } }])
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $group: { _id: "$name", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, moyenne: { $avg: "$grades.score" } } }, { $sort: { moyenne: -1 } }])
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, moyenne: { $avg: "$grades.score" } } }, { $sort: { moyenne: -1 } }])
+db.restaurants.findOne()
+db.restaurants.aggregate([ { $unwind: "$grades" }, { $match: { cuisine: 'Italian' } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, moyenne: { $avg: "$score" } } }, { $sort: { moyenne: -1 } }])
+db.restaurants.findOne()
+db.restaurants.aggregate([ { $match: { cuisine: null } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } } } }, { $project: { names: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine" } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } } } }, { $project: { names: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine", borough: "$borough" } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } } } }, { $project: { names: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $group: { _id: "$borough", names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } } } }, { $project: { names: 1 } }])
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $group: { _id: "$name", borough: '$borough' } }])
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian', borough: "$borough" } }, { $group: { _id: "$name" } }])
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $group: { _id: "$name" } }])
+db.restaurants.aggregate([ { $match: { cuisine: 'Italian' } }, { $group: { _id: "$borough" } }])
+db.restaurants.aggregate([ { $match: { cuisne: 'Italian' } }, { $group: { _id: "$borough" } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: "$price" } } }, { $match: { "count": { $gt: 950000 } } }])
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine", borough: "$borough" } }, { $project: { cuisine: 1, name: 1, borough: 1 } }, { $group: { _id: "$name", total: { $sum: 1 } } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine", borough: "$borough" } }, { $project: { cuisine: 1, name: 1, borough } }, { $group: { _id: "$name", total: { $sum: 1 } } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine", borough: "$borough" } }, { $project: { _id: 1, name: 1, total: 1 } }, { $group: { _id: "$name", total: { $sum: 1 } } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine", borough: "$borough" } }, { $group: { _id: "$name", total: { $sum: 1 } } }, { $project: { _id: 1, name: 1, total: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $match: { cuisine: "$cuisine", borough: "$borough" } }, { $group: { _id: "$borough", total: { $sum: 1 } } }, { $project: { _id: 1, name: 1, total: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: { borough: "$borough", cuisine: "$cuisine" }, count: { $sum: 1 } } }, { $project: { _id: 0, name: 1 } }, { $limit: 2 }])
+db.restaurants.aggregate([ { $group: { _id: { borough: "$borough", cuisine: "$cuisine" }, count: { $sum: 1 } } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }])
+db.restaurants.aggregate([ { $group: { _id: { borough: "$borough", cuisine: "$cuisine" }, count: { $sum: 1 } } }, { $project: { _id: 1, name: 1, count: 1 } }, { $limit: 2 }])
+db.restaurants.aggregate([ { $group: { _id: { borough: "$borough", cuisine: "$cuisine" }, count: { $sum: 1 } } }, { $project: { _id: 1, name: "$name", count: 1 } }, { $limit: 2 }])
+db.restaurants.aggregate([ { $group: { _id: { borough: "$borough", cuisine: "$cuisine" }, count: { $sum: 1 } } }, { $match: { count: { $gt: 1 } } }, { $project: { _id: 1, name: "$name", count: 1 } }, { $limit: 2 }])
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }, { $project: { _id: 1, name: 1, total: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: "$cuisine" } } }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: "$cuisine" } } }, { $project: { _id: 1, name: 1, total: 1 } }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: "$cuisine" } } }, { $project: { _id: 1, name: 1 } }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }, { $project: { _id: 1, name: 1 } }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }, { $group: { _id: "$cuisine" } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 } } }, { $goupe: { _id: "$cuisine" } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 }, names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, type: { $push: "$cuisine" } } }, { $project: { _id: 1, name: 1, type: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 }, names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, type: { $push: "$cuisine" } } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 }, names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, type: "$cuisine" } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 }, names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } }, cuisine: "$cuisine" } }, { $project: { _id: 1, name: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 }, names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } } } }, { $project: { _id: 1, names: 1 } }, { $limit: 2 }]);
+db.restaurants.aggregate([ { $group: { _id: "$borough", total: { $sum: 1 }, names: { $push: { $concat: ["$name", " ", "id: ", "$restaurant_id"] } } } }, { $project: { _id: 1, names: 1 } }]);
+db.restaurants.find( { cuisine: "Donuts", borough: "Queens" }). count()
+db.restaurants.find( { cuisne: "Donuts", borough: "Queens" }). count()
+db.restaurants.aggregate([ { $group: { _id: { $concat: [ "$cuisine", " ", "$borough"] }, count: { $sum: 1 } } }, { $project: { name: 1, _id: 1, count: 1 } }])
+db.restaurants.aggregate([ { $group: { _id: { $concat: [ "$cuisine", " ", "$borough"] }, count: { $sum: 1 } } }, { $project: { name: 1, _id: 1 } }])
+db.restaurants.aggregate([ { $group: { _id: { $concat: [ "$cuisine", " ", "$borough"] } } }, { $project: { name: 1, _id: 1 } }])
+db.restaurants.aggregate([ { $group: { "_id": "$name", "borough": "$borough", "cuisine": "$cuisine" } }, { $project: { name: 1, _id: 1 } }])
+db.restaurants.aggregate([ { $group: { _id: "$name", borough: "$borough", cuisine: "$cuisine" } }, { $project: { name: 1, _id: 1 } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: "$price" } } }, { $match: { "count": { $gt: 950000 } } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: "$price" } } }, { $match: { "$count": { $gt: 950000 } } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: "$price" } }, $match: { "$count": { $gt: 950000 } } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: "$price" } }, $match: { "count": { $gt: 950000 } } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: "$price" } } }])
+db.sales.aggregate([ { $group: { _id: "$price", count: { $sum: 1 } } }])
+db.sales.aggregate([ { $group: { _id: "$agency", count: { $sum: 1 } } }])
+db.sales.aggregate([ { $group: { _id: null, count: { $sum: 1 } } }])
+db.sales.insertMany([ { "restaurant_id": "5e79995fee344ac7b3cde77d", "agency": "abc", "price": NumberDecimal("100000"), "date": ISODate("2014-03-01T08:00:00Z") }, { "restaurant_id": "5e79995fee344ac7b3cde784", "agency": "xyz", "price": NumberDecimal("200000"), "date": ISODate("2014-03-01T09:00:00Z") }, { "restaurant_id": "5e79995fee344ac7b3cde77f", "agency": "abc", "price": NumberDecimal("5000000"), "date": ISODate("2014-03-15T09:00:00Z") }, { "restaurant_id": "5e79995fee344ac7b3cde785", "agency": "uvw", "price": NumberDecimal("5000000"), "date": ISODate("2014-04-04T11:21:39.736Z") }, { "restaurant_id": "5e79995fee344ac7b3cde788", "agency": "uvw", "price": NumberDecimal("10000000"), "date": ISODate("2014-04-04T21:23:13.331Z") }, { "restaurant_id": "5e79995fee344ac7b3cde790", "agency": "abc", "price": NumberDecimal("700000.5"), "date": ISODate("2015-06-04T05:08:13Z") }, { "restaurant_id": "5e79995fee344ac7b3cde78a", "agency": "xyz", "price": NumberDecimal("700000.5"), "date": ISODate("2015-09-10T08:43:00Z") }, { "restaurant_id": "5e79995fee344ac7b3cde781", "agency": "abc", "price": NumberDecimal("1000000"), "date": ISODate("2016-02-06T20:20:13Z") }])
+db.createCollection("sales", { capped: true, size: 5242880, max: 5000, validator: { $jsonSchema: { bsonType: "object", required: ["price"], properties: { agency: { bsonType: "string" }, price: { bsonType: "decimal", description: "must be a number and is required" }, date: { bsonType: "date" }, restaurant_id: { bsonType: "string" } } } } })
+db.restaurants.findOne( { borough: 'Missing' })
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: { $concat: [ "$address.building", " ", "$address.street", ", ", "$address.zipcode"] }, fullname: { $concat: [ "$name", " ", "(", " ", { $toUpper: "$borough" }, ")"] }, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: [{ $concat: ["$address.building", "$address.street"] }, "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: [{ $concat: ["$address.building", "$address.street"] }, "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "fullname": 1, "fullAddress": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: [{ $concat: ["$address.building", "$address.street"] }, "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "$fullname": 1, "$fullAddress": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: [{ $concat: ["$address.building", "$address.street"] }, "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "fullname": 1, "fullAddress": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: [{ $concat: ["$address.building", "$address.street"] }, "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "fullAdress": 1, "fullname": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: ["$address.building", "$address.street", "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "fullAdress": 1, "fullname": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: ["$address.building", "$address.street", "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }], "fullAdress": 1, "fullname": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: ["$address.building", "$address.street", "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }] } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: ["$address.building", "$address.street", "$address.zipcode"], fullname: ["$name", { $toUpper: "$borough" }] } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: ["$adress.building", "$adress.street", "$adress.zipcode"], fullname: ["$name", { $toUpper: "$borough" }] } }])
+db.restaurants.aggregate( [ { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { fullAddress: ["$adress.building", "$adress.street", "$adress.zipcode"], fullname: ["$name", { $toUpper: "$borough" }] } }, { $match: { cuisine: 'American', 'grades.grade': 'A' } }, { $project: { "fullAdress": 1, "fullname": 1, "cuisine": 1, "grades": 1, "_id": 0 } }])
+db.restaurants.find()
+use ny
+db.inventory.aggregate( [ { $group: { _id: "$society", total: { $sum: "$qty" } } }, { $match: { total: { $gte: 75 } } }])
+db.inventory.aggregate( [ { $group: { _id: "$society", total: { $sum: "$qty" } } }, { $match: { total: { gte: 75 } } }])
+db.inventory.aggregate( [ { $group: { _id: "$society", sumQty: { $sum: '$qty' } } }])
+db.inventory.aggregate( [ { $group: { _id: $society, sumQty: { $sum: '$qty' } } }])
+db.inventory.aggregate( [ { $group: { _id: null, sumQty: { $sum: '$qty' } } }])
+db.inventory.aggregate( [ { $group: { _id: 'qty', count: { $sum: 10 } } }])
+db.inventory.aggregate( [ { $group: { _id: 'qty', count: { $sum: 1 } } }])
+db.inventory.find()
+db.inventory.aggregate( [ { $group: { _id: qty, count: { $sum: 1 } } }])
+use shop
+db.restaurants.aggregate([ { $match: { borough: "Brooklyn" } }, { $addFields: { gradeA: { $function: { body: function (grades) { const gradeA = grades.filter((g) => g.grade === 'A').map((g) => 1); return Array.sum(gradeA); }, args: ["$grades"], lang: "js" } } } }, { $project: { gradeA: 1, borough: 1, name: 1, _id: 0, address: 1 } }, { $group: { _id: "$gradeA", names: { $push: { name: "$name", address: "$address" } } } }, { $sort: { gradeA: -1 } }, { $limit: 1 }]);
+db.restaurants.findOne({name: 'Crown Fried Chicken' })
+db.restaurants.findOne({borough: 'Brooklyn' })
+db.restaurants.aggregate([ { $match: { borough: "Brooklyn" } }, { $addFields: { gradeA: { $function: { body: function (grades) { const gradeA = grades.filter((g) => g.grade === 'A').map((g) => 1); return Array.sum(gradeA); }, args: ["$grades"], lang: "js" } } } }, { $project: { gradeA: 1, borough: 1, name: 1, _id: 0, address: 1 } }, { $group: { _id: "$gradeA", names: { $push: { name: "$name", address: "$address" } } } }, { $sort: { gradeA: -1 } }, { $limit: 1 }]);
+use ny
+db.inventory.find({ qty: { $gt: 75 } })
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $push: { scores: 19 }, $currentDate: { lastModified: true } })
+db.inventory.find({ qty: { $gt: 75 } })
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $set: { "scores": [] }, $currentDate: { lastModified: true } }, { $push: { scores: 19 } }, { "upsert": true })
+db.inventory.find({ qty: { $gt: 75 } })
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $unset: { scores: "", score: "" } }, { 'upsert': false })
+db.inventory.find({ qty: { $gt: 75 } })
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $set: { "scores": [] }, $currentDate: { lastModified: true } }, { $push: { scores: 19 } }, { "upsert": true })
+db.inventory.findOne( { society: "Nel" })
+db.inventory.updateOne( { society: "Nel" }, { $unset: { level: "" } }, { 'upsert': false })
+db.inventory.find( { level: { $exists: true } }, { _id: 0, society: 1 })
+db.inventory.find( { comment: { $exists: false } }, { _id: 0, society: 1 })
+db.inventory.updateMany( { society: 'Alex' }, { $set: { "comment": "Hello Alex" }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.find( { scores: 11 }, { _id: 0, society: 1 })
+db.inventory.find()
+db.inventory.updateMany( { society: /a/i }, { $set: { "scores": [11] }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.updateMany( { society: /a/i }, { $set: { "score1": [] }, $addToSet: { score1: 11 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.updateMany( { society: /a/i }, { $set: { "score": [] }, $addToSet: { score: 11 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.updateMany( { society: /a/i }, { $set: { "scores": [] }, $addToSet: { scores: 11 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.find()
+db.inventory.updateMany( { society: /a/i }, { $set: { "scores": [], scores: 11 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.find()
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $set: { "scores": [], scores: 19 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.find()
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $set: { "scores": [], scores: 19 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.find()
+db.inventory.updateMany( { qty: { $gt: 75 } }, { $set: { "score": [], scores: 19 }, $currentDate: { lastModified: true } }, { "upsert": true })
+db.inventory.updateOne( { qty: { $gt: 75 } }, { $set: { "score": [], scores: 19 }, $currentDate: { lastModified: true } }, { "upsert": true })
+{ qty: {$gt: 75} }, { $set: {"scores": [], scores: 19   } }, {"upsert": true} )
+) db.inventory.updateMany(
+}
+    }
+db.inventory.find( { $and : [ {$or: [{status: 'A'}, {status: 'B'}]}, {tags: "blank"} ] },{_id:0, society: 1, tags: 1} ).forEach(data => { let tagsArray= data.tags; const occ = {}; for (let n of tagsArray){ occ[n] = occ[n] ? occ[n] + 1 : 1; } print(occ["blank"]) let number = occ["blank"] if (number == 3) { db.inventory.updateMany({ data }, {$mul: {qty: 2,5}})
+) 
+}
+    }
+        })
+db.inventory.find( { $and : [ {$or: [{status: 'A'}, {status: 'B'}]}, {tags: "blank"} ] },{_id:0, society: 1, tags: 1} ).forEach(data => { let tagsArray= data.tags; const occ = {}; for (let n of tagsArray){ occ[n] = occ[n] ? occ[n] + 1 : 1; } print(occ["blank"]) let number = occ["blank"] if (number == 3) { db.inventory.updateMany({ $mul: {qty: 2,5}
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }, { _id: 0, society: 1, tags: 1 }). forEach((data) => { let tagsArray = data.tags; const occ = {}; for (let n of tagsArray) { occ[n] = occ[n] ? occ[n] + 1 : 1; } print(occ["blank"]); })
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }, { _id: 0, society: 1, tags: 1 }). forEach((data) => { let tagsArray = data.tags; const occ = {}; for (let n of tagsArray) { occ[n] = occ[n] ? occ[n] + 1 : 1; } print(ocs["blank"]); })
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }, { _id: 0, society: 1, tags: 1 }). forEach((data) => { const tagsArray = data.tags; print(tagsArray); })
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }, { _id: 0, society: 1, tags: 1 }). forEach((data) => { let tagsArray = data.tags; print(tagsArray); })
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }). forEach((data) => { let tagsArray = data.tags; print(tagsArray); })
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }). forEach((data) => { let tab = data.tags; print(tab); })
+db.inventory.updateMany({ $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; } if (count == 3) {res.push({ tags, society });} });
+let res = []
+db.inventory.updateMany({ $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: "blank" }] }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; } if (count == 3) {res.push({ tags, society });} });
+let res = []
+db.inventory.find( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: ['blank', 'blank', 'blank'] }] }, { _id: 0, society: 1, qty: 1 })
+db.inventory.updateMany( { $and: [ { $or: [{ status: 'A' }, { status: 'B' }] }, { tags: ['blank', 'blank', 'blank'] }] }, { $mul: { qty: 2.5 } })
+db.inventory.find( { $or: [ { status: 'C' }, { status: 'D' }] }, { _id: 0, society: 1, qty: 1 })
+db.inventory.updateMany( { $or: [ { status: 'C' }, { status: 'D' }] }, { $mul: { qty: 1.5 } })
+db.inventory.find( { $or: [ { status: 'C' }, { status: 'D' }] }, { _id: 0, society: 1, qty: 1 })
+db.inventory.updateMany( { $or: [ { status: 'C' }, { status: 'D' }] }, { $mul: { qty: 1.5 } })
+db.inventory.find( { $or: [ { status: 'C' }, { status: 'D' }] }, { _id: 0, society: 1, qty: 1 })
+db.inventory.updateMany( { $or: [ { status: 'C' }, { status: 'D' }] }, { $mul: { qty: 0.5 } }, { society: 1, _id: 0, qty: 1 })
+print(res)
+db.inventory.find({ tags: "blank" }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; } if (count == 3) {res.push({ tags, society });} });
+let res = []
+print(res)
+db.inventory.find({ tags: "blank" }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; if (count == 2) {res.push({ tags, society });break;} } });
+let res = []
+print(res.society)
+db.inventory.find({ tags: "blank" }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; if (count == 2) {res.push({ tags, society });break;} } });
+let res = []
+print(res.society)
+print(res);
+db.inventory.find({ tags: "blank" }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; if (count == 2) {res.push({ tags, society });break;} } });
+let res = []
+print(res);
+db.inventory.find({ tags: "blank" }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; if (count === 2) {res.push({ tags, society });break;} } });
+let res = []
+print(res);
+db.inventory.find({ tags: "blank" }, { _id: 0, society: 1, tags: 1 }). forEach(({ tags, society }) => { let count = 0; for (const tag of tags) { if (tag === 'blank') count += 1; if (count == 2) {res.push({ tags, society });break;} } });
+let res = []
+db.inventory.find( { $or: [ { status: 'A' }, { type: 'journal' }] }, { society: 1, _id: 0 })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0, type: 1 }). forEach(({ qty }) => { sumQty += qty; print(sumQty); })
+let sumQty = 0;
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0, type: 1 }). forEach(({ qty }) => { sumQty += qty; print(sumQty); })
+db.inventory.aggregate( { $match: { type: "journal" } }, { $group: { _id: null, sumQty: { $sum: '$qty' } } })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; const arrayOfqty = []; arrayOfqty.push(qty); print(arrayOfqty); const combined = arrayOfqty.push(...arrayOfqty); print(combined); })
+db.inventory.find( { tags: /blank/i }, { society: 1, _id: 0 })
+db.inventory.find( { $and: [ { $or: [{ price: 0.99 }, { price: 1.99 }] }, { sale: true }], $or: [ { qty: { $lt: 45 } }] }, { type: 1, _id: 0 })
+db.inventory.find( { $and: [ { $or: [{ price: 0.99 }, { price: 1.99 }] }, { sale: 'true' }], $or: [ { qty: { $lt: 45 } }] }, { type: 1, _id: 0 })
+db.inventory.find( { $and: [ { $or: [{ price: '0.99' }, { price: '1.99' }] }, { sale: 'true' }], $or: [ { qty: { $lt: 45 } }] }, { type: 1, _id: 0 }). count()
+db.inventory.find( { $and: [ { $or: [{ price: '0.99' }, { price: '1.99' }] }, { sale: 'true' }], $or: [ { qty: { $lt: 45 } }] }, { type: 1, _id: 0 })
+db.inventory.find( { tags: { $exists: true, $not: { $size: 0 } } }, { _id: 0, society: 1, tags: 1 })
+db.inventory.find( { $and: [ { $or: [ { price: '0.99' }, { price: '1.99' }] }] }, { type: 1, _id: 0 })
+db.inventory.find({ $and: [ { $or: [{ status: "A" }, { type: "journal" }] }, { qty: { $lt: 100 } }] }, { _id: 0, society: 1 })
+db.inventory.find( { $or: [ { status: 'A' }, { type: 'journal' }] }, { society: 1, _id: 0 })
+db.inventory.find({ qty: { $gt: 45, $lt: 90 } }, { _id: 0, society: 1 })
+db.inventory.find( { qty: { $gte: 45 } }, { society: 1, _id: 0 })
+db.inventory.find( { qty: { $gte: 45 } })
+db.inventory.find( { qty: { $gte: 45 } }, { name: 1, _id: 0 })
+db.inventory.find( { qty: { $gte: 45 } }, { name: 1, _id: 0 })
+db.inventory.find( { society: /^A/i }, { type: 1, _id: 0 })
+db.inventory.find( { society: /^A/i })
+db.inventory.find( { name: /^A/i }). count()
+db.inventory.find( { name: /^A/i })
+db.inventory.find( { name: /^A/i })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; let arrayOfqty = []; arrayOfqty.push(qty); print(arrayOfqty); const combined = arrayOfqty.push(...arrayOfqty); print(combined); })
+db.inventory.findOne()
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; let arrayOfqty = []; arrayOfqty.push(qty); print(arrayOfqty); const combined = [].concat(arrayOfqty); print(combined); })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; let arrayOfqty = []; arrayOfqty.push(qty); print(arrayOfqty); const combined = [].concat(arrayOfqty, arrayOfqty); print(combined); })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; print(qty); let arrayOfqty = []; arrayOfqty.push(qty); print(arrayOfqty); })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; print(qty); let arrayOfqty = []; arrayOfqty.push(qty); })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 }). forEach((data) => { let qty = data.qty; print(qty); })
+db.inventory.find({ type: 'journal' }, { qty: 1, _id: 0 })
+db.inventory.find({ type: 'journal' }, { qty: { $sum: "$qty" } })
+db.inventory.find({ type: 'journal' }). forEach((data) => { let articleQty = []; articleQty.push(data.qty); articleQty.concat(); print(articleQty); })
+db.inventory.find({ type: 'journal' }). forEach((data) => { let articleQty = []; articleQty.push(data.qty); articleQty.concat(articleQty); print(articleQty); })
+db.inventory.find({ type: 'journal' }). forEach((data) => { let articleQty = []; articleQty.push(data.qty).concat(); articleQty.concat(articleQty)``; print(articleQty); })
+db.inventory.find({ type: 'journal' }). forEach((data) => { let articleQty = []; articleQty.push(data.qty).concat(); print(articleQty); })
+db.inventory.find({ type: 'journal' }). forEach((data) => { let articleQty = []; articleQty.push(data.qty); print(articleQty); })
+db.inventory.find({ type: 'journal' })
+db.inventory.find({ type: journal })
+db.inventory.findOne()
+db.inventory.insertMany([{ "sale": true, "price": 0.99, "society": "Alex", type: "postcard", qty: 19, size: { h: 11, w: 29, uom: "cm" }, status: "A", tags: ["blank", "blank", "blank"], "year": 2019 }, { "sale": false, "price": 1.99, "society": "Alan", type: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, status: "A", tags: ["blank", "red", "blank", "blank"], "year": 2019 }, { "sale": true, "price": 1.5, "society": "Albert", type: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, status: "A", tags: ["gray"], year: 2019 }, { "sale": true, "price": 7.99, "society": "Alice", type: "lux paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, status: "D", year: 2020 }, { "sale": true, "price": 2.99, "society": "Sophie", type: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, status: "D", tags: ["gel", "blue"], year: 2017 }, { "sale": false, "price": 0.99, "society": "Phil", type: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, status: "A", tags: ["gray"], year: 2018 }, { "sale": true, "price": 4.99, "society": "Nel", type: "journal", qty: 19, size: { h: 10, w: 21, uom: "cm" }, status: "B", tags: ["blank", "blank", "blank", "red"], "year": 2019, level: 100 }, { "sale": true, "price": 4.99, "society": "Alex", type: "journal", qty: 15, size: { h: 17, w: 20, uom: "cm" }, status: "C", tags: ["blank"], "year": 2019 }, { "sale": false, "price": 5.99, "society": "Tony", type: "journal", qty: 100, size: { h: 14, w: 21, uom: "cm" }, status: "B", tags: ["blank", "blank", "blank", "red"], "year": 2020 }]);
+db.createCollection("inventory");
+use shop
+db.restaurants.find( { name: /^(\w).*\1$/i }, { _id: 0, name: 1 })
+b.restaurants.find( { name: /^(\w).*\1$/i }, { _id: 0, name: 1 })
+db.restaurants.find( { $and: [ { name: /^[aeiouy]/i }, { name: /[aeiouy]$/i }] }, { _id: 0, name: 1 })
+db.restaurants.find( { $and: [ { name: /^[aeiouy]/i }, { name: /[aeiouy]$/i }] }, { name: 1 })
+db.restaurants.find( { name: /^e.*e$/i })
+db.restaurants.find( { name: /^e...e$/i })
+db.restaurants.find( { name: /^p...p$/i }). count()
+db.restaurants.find( { name: /^p...p$/i })
+db.restaurants.find( { name: /^[a-z]$/i })
+db.restaurants.find( { name: /^[a-z]$\1/ })
+)
+    }
+db.restaurants.find( { name: /^[a-z]$/1
+db.restaurants.find( { $and: [ { name: /^[aeiouy]/i }, { name: /[aeiouy]$/i }] })
+db.restaurants.find( { name: /^[a-z]$/i })
+db.restaurants.find( { name: /\br\\w*\\b/ })
+db.restaurants.find( { $and: [ { name: /^[aeiou]/i }, { name: /[aeiou]$/i }] })
+db.restaurants.find( { $and: [ { name: /^[aeiou]|/i }, { name: /[aeiou]$/i }] })
+db.restaurants.find( { name: /^[aeiou]$/i })
+db.restaurants.find( { name: /^[aeiou] [aeiou]$/i })
+db.restaurants.find( { name: /^[aeiou]&&[aeiou]$/i })
+db.restaurants.find( { name: /^[aeiou]|[aeiou]$/i })
+    }
+db.restaurants.find( { name:  {$regex: '/^[aeiou]/i', '/[aeiou]$/i'}
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0.621371) } } }, { _id: 0, borough: { $toUpper: "$borough" }, name: { $toUpper: "$name" }, "address.coord": 1 })
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0.621371) } } }, { _id: 0, borough: { $toUpper: "borough" }, name: { $toUpper: "name" }, "address.coord": 1 })
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0.621371) } } }, { borough: { $toUpper: "borough" }, name: { $toUpper: "name" }, "address.coord": 1 })
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { name: { $regex: { $or: ['/^[aeiou]/i', '/[aeiou]$/i'] } } })
+db.restaurants.find( { name: { $regex: '/^[aeiou]/i' | '/[aeiou]$/i' } })
+db.restaurants.find( { name: { $regex: /^[aeiou]/i | /[aeiou]$/i } })
+db.restaurants.find( { name: /^[aeiou]/i | /[aeiou]$/i })
+db.restaurants.find( { name: /^[aeiou]/i | /[aeiou]$/ })
+cls
+db.restaurants.find( { "grades.0.date": ISODate("2013-12-20T00:00:00Z") }, { _id: 0, name: 1, borough: 1, "grades.date": 1 }).count()
+db.restaurants.find( { "grades.0.date": ISODate("2013-12-30T00:00:00Z") }, { _id: 0, name: 1, borough: 1, "grades.date": 1 }).count()
+db.restaurants.find( { "grades.0.date": ISODate("2013-12-30T00:00:00Z") }, { _id: 0, name: 1, borough: 1, "grades.date": 1 });
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0.621371) } } })
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0.621371) } } }). count()
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 2) } } }). count()
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0, 621371) } } }). count()
+    let distanceInMetre = (miles, coef) =>  miles/coef 
+let coordinate= [-73.961704, 40.662942];
+let distanceInMetre = (5000, 0,621371) =>  (a/b)
+let distanceInMetre = (a, b) => { return (a/b) let distanceInMetre = (5000, 0,621371) => {
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre(5000, 0, 621371) } } }). count()
+let distanceInMetre = (a, b) => { return a / b; }
+let coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre } } }). count()
+    let distanceInMetre = miles / coef;
+    let miles = 5000;
+    let coef = 0.621371;
+let coordinate= [-73.961704, 40.662942];
+const query = () => { let coordinate = [-73.961704, 40.662942]; let coef = 0.621371; let miles = 5000; let distanceInMetre = miles / coef; db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distanceInMetre } } }). count(); }
+query()
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distance } } }). count()
+const distance = 5000 / 0.621371;
+const coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distance } } }). count()
+const distance = 5000 * 0.621371;
+const coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: coordinate }, $maxDistance: distance } } })
+const distance = 5000 * 0.621371;
+const coordinate= [-73.961704, 40.662942];
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.961704, 40.662942] }, $maxDistance: 6000 } } }). count()
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.961704, 40.662942] }, $maxDistance: 5000 } } }). count()
+db.restaurants.find( { "address.coord": { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.961704, 40.662942] }, $maxDistance: 5000 } } })
+db.restaurants.find( { loc: { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.961704, 40.662942] }, $maxDistance: 5000 } } })
+db.restaurants.find( { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.9667, 40.78] }, $maxDistance: 5000 } })
+db.restaurants.find( { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.9667, 40.78] }, $minDistance: 1000, $maxDistance: 5000 } })
+db.restaurants.find( { coord: { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.9667, 40.78] }, $minDistance: 1000, $maxDistance: 5000 } } })
+db.restaurants.find( { location: { $nearSphere: { $geometry: { type: "Point", coordinates: [-73.9667, 40.78] }, $minDistance: 1000, $maxDistance: 5000 } } })
+db.restaurants.find({ $nearSphere: { $geometry: { type: "Point", coordinates: [-73.961704, 40.662942] }, $maxDistance: 5000 } })
+db.restaurants.findOne()
+db.restaurants.createIndex({ "address.coord": "2dsphere" });
+db.restaurants.findOne()
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); let firstEval = doc.grades[0].date.toISOString().substring(0, 10); let lastEval = doc.grades[3].date.toISOString().substring(0, 10); print(`Dérnière évaluation fais le ${firstEval}`); print(`Première évaluation fais le ${lastEval}`); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); let firstEval = doc.grades[0].date.toISOString().substring(0, 10); print(`Dérnière évaluation fais le ${firstEval}`); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); print(doc.grades[0].date.toISOString().substring(0, 10)); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); print(doc.grades[0].date.toISOString()); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); print(doc.grades[0].date.substring(0, 10)); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); print(doc.grades[0].date); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); print(doc.grades[0]); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 1 }).forEach((doc) => { print(doc.name.toUpperCase()); print(doc.grade[0]); })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1, grades: 'grades.0.grades' }).forEach((doc) => print(doc.name.toUpperCase()))
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).forEach((doc) => print(doc.name.toUpperCase()))
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).forEach((doc) => print(doc.name)).toUpperCase()
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).forEach((doc) => print(doc.name))
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).forEach((doc) => print(doc))
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).forEach((doc) => print(doc.name).toUpperCase())
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).toUpperCase()
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).capitalize()
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 }).count()
+db.restaurants.find({ $and: [ { name: /coffee/i }, { $or: [{ borough: 'Bronx' }, { borough: 'Brooklyn' }] }, { grades: { $size: 4 } }] }, { _id: 0, name: 1 })
+db.restaurants.find({ $and: [ { name: /coffee/i }] }, { _id: 0, name: 1 })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { borough: { $or: ['Bronx', 'Brooklyn'] } }] }, { _id: 0, name: 1 })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { borough: /Bronx | Brooklyn/i }] }, { _id: 0, name: 1 })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { borough: /Bronx | Brooklyn/i }] })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { borough: /Bronx | Brooklyn/i }, { grades: { $size: 4 } }] })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { borough: /Bronx | Brooklyn/i }, { grades: { $size: 4 } }] })
+db.restaurants.find({ $and: [ { name: /coffee/i }, { borough: /Bronx | Brooklyn/i }, { grades: { $size: 4 } }] })
+db.restaurants.find({ $and: [ { name: /Coffee | Restaurant/i }, { name: /^(?!Starbucks)/ }] }, { _id: 0, name: 1 })
+db.restaurants.find( { name: /Coffee | Restaurant/i }, { _id: 0, name: 1 })
+db.restaurants.find( { name: /Coffee Restaurant/i }, { _id: 0, name: 1 })
+db.restaurants.find({ $and: [ { name: /Coffee Restaurant/i }, { _id: 0, name: 1 }] })
+db.restaurants.find({ $and: [{borough: 'Bronx'}, {$or:[{name: /^Coffee/}, {name: /^coffee/}]}, {$nor: [{name: /^Starbucks/}]}], {name:1}
+db.restaurants.find({ $and: [{ borough: 'Bronx' }, { $or: [{ name: /^Coffee/ }, { name: /^coffee/ }] }, { $ne: [{ name: /^Starbucks/ }] }] })
+db.restaurants.find({'grades.0.grade': {$in: ['A', 'B']}})
+db show
+dbs show
+db.restaurants.find({ $and: [{ borough: 'Bronx' }, { $or: [{ name: /^Coffee/ }, { name: /^coffee/ }] }, { $nor: [{ name: /^Starbucks/ }] }] })
+db.restaurants.find({ $and: [{ $or: [{ name: /^Coffee/ }, { name: /^coffee/ }] }, { $nor: [{ name: /^Starbucks/ }] }] })
+db.restaurants.find({ $and: [{ $or: [{ name: /^Coffee/ }, { name: /^coffee/ }] }, { $not: [{ name: /^Starbucks/ }] }] })
+db.restaurants.find({ $and: [{ $or: [{ name: /^Coffee/ }, { name: /^coffee/ }] }, { $ne: [{ name: /^Starbucks/ }] }] })
+db.restaurants.find({$ne: 'Starbucks'}, {$or: [{name: /^Coffee/}, {name: /^coffee/}]}, {$ne: 'Starbucks'})
+db.restaurants.find({$ne: 'Starbucks'}, {$or: [{name: /^Coffee/}, {name: /^coffee/}]})
+db.restaurants.find({borough: 'Bronx', $or:[{name: /^Coffee/}, {name: /^coffee/}]}).count()
+db.restaurants.find({borough: 'Bronx', $or:[{name: /^Coffee/}, {name: /^coffee/}]})
+db.restaurants.find({$or: [{name: /^Coffee/}, {name: /^coffee/}]})
+db.restaurants.find({'grades.0.grade': {$in: ['A', 'B']}})
+db.restaurants.find({'grades'[0]: {$in: ['A', 'B']}})
+db.restaurants.findOne()
+db.restaurants.find({borough: 'Bronx', grades:{$gt:4}})
+db.restaurants.find({borough: 'Bronx'}, grades:{$gt:4})
+db.restaurants.find({borough: 'Bronx'}, 'grades':{$gt:4})
+db.restaurants.find({borough: 'Bronx'}, {cuisine:1})
+db.restaurants.distinct({borough: 'Bronx'}, {cuisine:1})
+db.restaurants.distinct('cuisne' { borough: 'Bronx' })
+db.restaurants.distinct('cuisne', { borough: 'Bronx' })
+db.restaurants.distinct(cuisne, { 'borough': 'Bronx' })
+db.restaurants.distinct('cuisne', { 'borough': 'Bronx' })
+db.restaurants.distinct('Bronx', { cuisine: 1 })
+db.restaurants.distinct("cuisine" {'Bronx'})
+db.restaurants.distinct("cuisine", {'Bronx'})
+db.restaurants.distinct("Bronx", {cuisine})
+db.restaurants.findOne()
+db.restaurants.distinct('borough')
+db.restaurants.distinct('borought')
+db.restaurants.find({ 'grades.score': { $gt: 20 }, 'grades.grade': 'A' }, { name: 1 }).sort({ name: -1 })
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}.sort({name:-1}) db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}.sort({name:-1}))
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}).count()
+db.restaurants.find({ 'grades.score': { $gt: 20 } }).count()
+db.restaurants.find({ 'grades.score': { $gt: 20 } })
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}).sort({name:-1})
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}).sort({name:1})
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}).sort({name:-1})
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'},{name:1}).sort({key:-1})
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'}{name:1}).sort({key:-1})
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':'A'})
+db.restaurants.find({'grades.score':{$gt:20}, 'grades.grade':A})
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 10}}).count()
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 10}})
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 20}})
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 20}}).count()
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 10}}).count()
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 10}} ).count()
+db.restaurants.find({ cuisine: 'Italian', 'grades.score':{$gt: 10}} )
+db.restaurants.find({ cuisine: 'Italienne', 'grades.score':{$gt: 10}} )
+db.restaurants.find({ borough: "Brooklyn", cuisine: "Hamburgers" })
+db.restaurants.find({ cuisine: { $in: ["Delicatessen", "American"] } })
+db.restaurants.find({ cuisine: "Delicatessen" })
+db.restaurants.countDocuments()
+use ny
+show dbs
+quit
+db.authors.insertMany([ { name: "Alan", grade: "master 5", notes: [11, 20, 18, 19], status: "A++" }, { name: "Alice", grade: "master 4", notes: [11, 17, 19, 13], status: "A+" }]);
+db.createCollection("authors")
+use school
+db.addresses.find()
+db.addresses.insertOne( { name: 'Indiana Coffee', location: '4th Baker Street, London' })
+show collections
+db.createCollection('addresses')
+db
+use shop
+show dbsn('addresses')
+db
+use shop
+show dbs
