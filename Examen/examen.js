@@ -176,7 +176,7 @@ db.categoriestree.find().forEach(function(doc) {
  //             - collection Borough (pour les quartier)
  //             - collection addresse 
 //              - collection grades ou on stock le tableau de grades. On ajoute un grade_id aux documents
-//                de la collection 'restaurants'. Si on recherche les grades d'un restaurant, on fais:
+//                de la collection 'restaurants'. Si on recherche les grades d'un restaurant
  // - modifier les grades en assignant une note (number)
 
 
@@ -212,37 +212,6 @@ db.restaurants.updateMany(
     { $unset: { borough: ""}},
  )
 
-  // On crée la collection 'cuisineType'
-  db.createCollection('cuisineType')
-  // On insere les nouvelles datas
-   db.cuisineType.insertMany([
-      { _id: "Manhattan", name: "Manhattan" },
-      { _id: "Brooklyn", name: "Brooklyn" },
-      { _id: "Bronx", name: "Bronx" },
-      { _id: "Queens", name: "Queens" },
-      { _id: "Staten Island", name: "Staten Island" },
-      { _id: "Missing", name: "Missing"}
-    ]);
-    
-    // On stock toutes les data de la collection 'borough' dans un array
-    const cuisines = db.borough.find().toArray();
-    // On boucle sur le array pour set le borough_id avec le borough._id
-    for (borough of boroughs) {
-      db.restaurants.updateMany(
-        { borough: borough._id },
-        { $set: { borough_id: borough._id } }
-      );
-    }
-  // On vérifie que cela a fonctionner = Le number doit etre le meme que le nombre de la totalité du nombre de document
-  db.restaurants.find({
-      borough_id: {$exists: true}
-  }).count()
-  
-  // On supprime le champ 'borough' des docs de la collection restaurants
-  db.restaurants.updateMany(
-      {},
-      { $unset: { borough: ""}},
-   )
 
 
 // On regroupe les restaurants avec la clé $restaurant_id et un champ grades ou on pousse les valeur dans un tableau. Le out pour enregistrer le reultat dans une nouvelle collection
