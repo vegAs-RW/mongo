@@ -1203,3 +1203,5 @@
 {"t":{"$date":"2023-03-10T11:30:09.427Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"updateMany","class":"Collection","db":"ny","coll":"restaurants","arguments":{"filter":{},"options":{}}}}
 {"t":{"$date":"2023-03-10T11:30:22.352Z"},"s":"I","c":"MONGOSH","id":1000000007,"ctx":"repl","msg":"Evaluating input","attr":{"input":"db.restaurants.findOne()"}}
 {"t":{"$date":"2023-03-10T11:30:22.357Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"findOne","class":"Collection","db":"ny","coll":"restaurants","arguments":{"query":{},"options":{}}}}
+{"t":{"$date":"2023-03-10T12:46:59.432Z"},"s":"I","c":"MONGOSH","id":1000000007,"ctx":"repl","msg":"Evaluating input","attr":{"input":"db.restaurants.find()"}}
+{"t":{"$date":"2023-03-10T12:46:59.442Z"},"s":"I","c":"MONGOSH","id":1000000011,"ctx":"shell-api","msg":"Performed API call","attr":{"method":"find","class":"Collection","db":"ny","coll":"restaurants","arguments":{"options":{}}}}

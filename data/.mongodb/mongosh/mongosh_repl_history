@@ -1,3 +1,4 @@
+db.restaurants.find()
 db.restaurants.findOne()
 db.restaurants.updateMany( {}, { $unset: { borough: "" } })
 db.restaurants.updateMany( { $unset: { borough: "" } })
